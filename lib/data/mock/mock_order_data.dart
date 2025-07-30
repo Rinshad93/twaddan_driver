@@ -1,0 +1,325 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../models/earnings_model.dart';
+import '../models/order_model.dart';
+import '../models/order_item_model.dart';
+
+class MockOrderData {
+  static List<Order> get availableOrders => [
+    Order(
+      id: 'order_001',
+      restaurantName: 'McDonald\'s Downtown',
+      restaurantAddress: '123 Main Street, San Francisco, CA',
+      restaurantLocation: const LatLng(37.7849, -122.4094),
+      customerName: 'Alice Johnson',
+      customerAddress: '456 Oak Avenue, Apt 2B, San Francisco, CA',
+      customerPhone: '+1 (555) 111-2222',
+      customerLocation: const LatLng(37.7749, -122.4194),
+      items: [
+        const OrderItem(
+          id: 'item_001',
+          name: 'Big Mac',
+          quantity: 2,
+          price: 5.99,
+        ),
+        const OrderItem(
+          id: 'item_002',
+          name: 'Large Fries',
+          quantity: 1,
+          price: 3.49,
+        ),
+        const OrderItem(
+          id: 'item_003',
+          name: 'Coca Cola (Large)',
+          quantity: 2,
+          price: 2.99,
+        ),
+      ],
+      totalAmount: 21.45,
+      deliveryFee: 4.99,
+      status: OrderStatus.pending,
+      createdAt: DateTime.now().subtract(const Duration(minutes: 5)),
+      estimatedPickupTime: DateTime.now().add(const Duration(minutes: 10)),
+      estimatedDeliveryTime: DateTime.now().add(const Duration(minutes: 25)),
+      specialInstructions: 'Please ring the doorbell twice',
+      restaurantPhone: '+1 (555) 333-4444',
+      distanceToRestaurant: 1.2,
+      distanceToCustomer: 2.1,
+    ),
+    Order(
+      id: 'order_002',
+      restaurantName: 'Pizza Palace',
+      restaurantAddress: '789 Broadway, San Francisco, CA',
+      restaurantLocation: const LatLng(37.7649, -122.4294),
+      customerName: 'Bob Wilson',
+      customerAddress: '321 Pine Street, San Francisco, CA',
+      customerPhone: '+1 (555) 222-3333',
+      customerLocation: const LatLng(37.7549, -122.4394),
+      items: [
+        const OrderItem(
+          id: 'item_004',
+          name: 'Margherita Pizza (Large)',
+          quantity: 1,
+          price: 18.99,
+        ),
+        const OrderItem(
+          id: 'item_005',
+          name: 'Garlic Bread',
+          quantity: 1,
+          price: 6.99,
+        ),
+        const OrderItem(
+          id: 'item_006',
+          name: 'Pepsi (2L)',
+          quantity: 1,
+          price: 3.99,
+        ),
+      ],
+      totalAmount: 29.97,
+      deliveryFee: 5.99,
+      status: OrderStatus.pending,
+      createdAt: DateTime.now().subtract(const Duration(minutes: 2)),
+      estimatedPickupTime: DateTime.now().add(const Duration(minutes: 15)),
+      estimatedDeliveryTime: DateTime.now().add(const Duration(minutes: 35)),
+      specialInstructions: 'Leave at the front door if no answer',
+      restaurantPhone: '+1 (555) 444-5555',
+      distanceToRestaurant: 0.8,
+      distanceToCustomer: 3.2,
+    ),
+    Order(
+      id: 'order_003',
+      restaurantName: 'Sushi Express',
+      restaurantAddress: '555 Market Street, San Francisco, CA',
+      restaurantLocation: const LatLng(37.7949, -122.3994),
+      customerName: 'Emma Davis',
+      customerAddress: '111 Union Square, San Francisco, CA',
+      customerPhone: '+1 (555) 444-5555',
+      customerLocation: const LatLng(37.7879, -122.4075),
+      items: [
+        const OrderItem(
+          id: 'item_007',
+          name: 'California Roll',
+          quantity: 2,
+          price: 8.99,
+        ),
+        const OrderItem(
+          id: 'item_008',
+          name: 'Salmon Teriyaki',
+          quantity: 1,
+          price: 15.99,
+        ),
+        const OrderItem(
+          id: 'item_009',
+          name: 'Miso Soup',
+          quantity: 1,
+          price: 3.99,
+        ),
+      ],
+      totalAmount: 37.96,
+      deliveryFee: 6.99,
+      status: OrderStatus.pending,
+      createdAt: DateTime.now().subtract(const Duration(minutes: 8)),
+      estimatedPickupTime: DateTime.now().add(const Duration(minutes: 5)),
+      estimatedDeliveryTime: DateTime.now().add(const Duration(minutes: 20)),
+      restaurantPhone: '+1 (555) 666-7777',
+      distanceToRestaurant: 0.5,
+      distanceToCustomer: 1.8,
+    ),
+  ];
+
+  static List<Order> get activeOrders => [
+    availableOrders.first.copyWith(
+      status: OrderStatus.accepted,
+      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+    ),
+  ];
+
+  static List<Order> get completedOrders => [
+    Order(
+      id: 'order_100',
+      restaurantName: 'Burger King',
+      restaurantAddress: '222 2nd Street, San Francisco, CA',
+      restaurantLocation: const LatLng(37.7749, -122.4094),
+      customerName: 'David Brown',
+      customerAddress: '333 3rd Avenue, San Francisco, CA',
+      customerPhone: '+1 (555) 777-8888',
+      customerLocation: const LatLng(37.7649, -122.4194),
+      items: [
+        const OrderItem(
+          id: 'item_010',
+          name: 'Whopper',
+          quantity: 1,
+          price: 7.99,
+        ),
+        const OrderItem(
+          id: 'item_011',
+          name: 'Onion Rings',
+          quantity: 1,
+          price: 4.99,
+        ),
+      ],
+      totalAmount: 12.98,
+      deliveryFee: 3.99,
+      status: OrderStatus.delivered,
+      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+      estimatedPickupTime: DateTime.now().subtract(const Duration(hours: 1, minutes: 45)),
+      estimatedDeliveryTime: DateTime.now().subtract(const Duration(hours: 1, minutes: 25)),
+      restaurantPhone: '+1 (555) 888-9999',
+      distanceToRestaurant: 1.0,
+      distanceToCustomer: 1.5,
+    ),
+    Order(
+      id: 'order_101',
+      restaurantName: 'Taco Bell',
+      restaurantAddress: '444 4th Street, San Francisco, CA',
+      restaurantLocation: const LatLng(37.7549, -122.4094),
+      customerName: 'Lisa Martinez',
+      customerAddress: '555 5th Avenue, San Francisco, CA',
+      customerPhone: '+1 (555) 999-0000',
+      customerLocation: const LatLng(37.7449, -122.4194),
+      items: [
+        const OrderItem(
+          id: 'item_012',
+          name: 'Crunchy Taco Supreme',
+          quantity: 3,
+          price: 2.99,
+        ),
+        const OrderItem(
+          id: 'item_013',
+          name: 'Mexican Pizza',
+          quantity: 1,
+          price: 5.99,
+        ),
+      ],
+      totalAmount: 14.96,
+      deliveryFee: 4.99,
+      status: OrderStatus.delivered,
+      createdAt: DateTime.now().subtract(const Duration(hours: 4)),
+      estimatedPickupTime: DateTime.now().subtract(const Duration(hours: 3, minutes: 45)),
+      estimatedDeliveryTime: DateTime.now().subtract(const Duration(hours: 3, minutes: 20)),
+      restaurantPhone: '+1 (555) 000-1111',
+      distanceToRestaurant: 0.7,
+      distanceToCustomer: 2.3,
+    ),
+
+  ];
+  static List<EarningsData> get weeklyEarningsData => [
+    EarningsData(
+      totalEarnings: 45.50,
+      totalDeliveries: 4,
+      averageEarning: 11.38,
+      basePay: 32.00,
+      tips: 11.50,
+      bonuses: 2.00,
+      date: DateTime.now().subtract(const Duration(days: 6)),
+    ),
+    EarningsData(
+      totalEarnings: 67.75,
+      totalDeliveries: 6,
+      averageEarning: 11.29,
+      basePay: 48.00,
+      tips: 17.75,
+      bonuses: 2.00,
+      date: DateTime.now().subtract(const Duration(days: 5)),
+    ),
+    EarningsData(
+      totalEarnings: 52.25,
+      totalDeliveries: 5,
+      averageEarning: 10.45,
+      basePay: 40.00,
+      tips: 10.25,
+      bonuses: 2.00,
+      date: DateTime.now().subtract(const Duration(days: 4)),
+    ),
+    EarningsData(
+      totalEarnings: 78.50,
+      totalDeliveries: 7,
+      averageEarning: 11.21,
+      basePay: 56.00,
+      tips: 20.50,
+      bonuses: 2.00,
+      date: DateTime.now().subtract(const Duration(days: 3)),
+    ),
+    EarningsData(
+      totalEarnings: 92.25,
+      totalDeliveries: 8,
+      averageEarning: 11.53,
+      basePay: 64.00,
+      tips: 26.25,
+      bonuses: 2.00,
+      date: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    EarningsData(
+      totalEarnings: 115.75,
+      totalDeliveries: 10,
+      averageEarning: 11.58,
+      basePay: 80.00,
+      tips: 33.75,
+      bonuses: 2.00,
+      date: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    EarningsData(
+      totalEarnings: 24.75,
+      totalDeliveries: 6,
+      averageEarning: 4.13,
+      basePay: 20.00,
+      tips: 4.75,
+      bonuses: 0.00,
+      date: DateTime.now(),
+    ),
+  ];
+
+  static List<GoalData> get currentGoals => [
+  GoalData(
+  id: 'daily_goal_1',
+  title: 'Daily Earning Goal',
+  targetAmount: 100.00,
+  currentAmount: 24.75,
+  deadline: DateTime.now().add(const Duration(hours: 8)),
+  type: GoalType.daily,
+  isCompleted: false,
+  ),
+  GoalData(
+  id: 'weekly_goal_1',
+  title: 'Weekly Earning Goal',
+  targetAmount: 600.00,
+  currentAmount: 476.75,
+  deadline: DateTime.now().add(const Duration(days: 1)),
+  type: GoalType.weekly,
+  isCompleted: false,
+  ),
+  GoalData(
+  id: 'monthly_goal_1',
+  title: 'Monthly Target',
+  targetAmount: 2500.00,
+  currentAmount: 2100.00,
+  deadline: DateTime.now().add(const Duration(days: 8)),
+  type: GoalType.monthly,
+  isCompleted: false,
+  ),
+  GoalData(
+  id: 'completed_goal_1',
+  title: '50 Deliveries Challenge',
+  targetAmount: 50.00,
+  currentAmount: 50.00,
+  deadline: DateTime.now().subtract(const Duration(days: 2)),
+  type: GoalType.custom,
+  isCompleted: true,
+  ),];
+  static Map<String, double> get todayEarnings => {
+    'totalEarnings': 24.75,
+    'totalDeliveries': 6,
+    'averageEarning': 4.13,
+  };
+
+  static Map<String, double> get weeklyEarnings => {
+    'totalEarnings': 142.50,
+    'totalDeliveries': 28,
+    'averageEarning': 5.09,
+  };
+
+  static Map<String, double> get monthlyEarnings => {
+    'totalEarnings': 680.25,
+    'totalDeliveries': 125,
+    'averageEarning': 5.44,
+  };
+}
