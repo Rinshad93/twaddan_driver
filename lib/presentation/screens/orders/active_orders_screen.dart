@@ -121,7 +121,7 @@ class _ActiveOrdersScreenState extends State<ActiveOrdersScreen>
               message = 'Order delivered successfully! 🎉';
             }
 
-            context.showSuccessSnackBar(message);
+            // context.showSuccessSnackBar(message);
 
             // Refresh the active orders list after a short delay
             Future.delayed(const Duration(milliseconds: 500), () {
