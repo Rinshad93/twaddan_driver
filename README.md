@@ -58,3 +58,16 @@ Demo Credentials
 -----------------
 Email: john.smith@driver.com
 Password: 123456
+
+| Task                        | Time   | 
+| --------------------------- |--------|
+| **Planning & Setup**        | 0.5 hr |
+| **Core Features**           | 7 hr   |
+| **UI/UX Polish**            | 1.5 hr |
+| **Testing & Documentation** | 1 hr   |
+
+Challenges faced
+---------------
+1.Cache Invalidation Timing - Determining when and how to invalidate cached data without causing unnecessary API calls
+Solution: Implemented strategic cache invalidation on context switching and after order acceptance
+2.Cache vs Fresh Data Balance
