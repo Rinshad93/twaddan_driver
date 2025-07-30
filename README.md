@@ -58,4 +58,3 @@ Demo Credentials
 -----------------
 Email: john.smith@driver.com
 Password: 123456
-Phone: +1 (555) 123-4567
